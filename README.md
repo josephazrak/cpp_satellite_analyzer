@@ -5,10 +5,18 @@ It also supports running "variation simulations" to see how changing eccentricit
 
 Some 3rd party libraries are used (see LICENSE).
 
-This code uses the Cmake build system. Install cmake to your machine and then simply run the script `build.sh` like this: ``chmod +x build.sh; ./build.sh``
+## Building
+This code uses the Cmake build system. Install cmake to your machine and then simply run the script `build.sh` like this: 
+```
+$ chmod +x build.sh
+$ ./build.sh
+```
 The binary will pop into a new bin/ folder.
 
 ## Usage
-Usage: ``cpp_satellite_analyzer_project --input <input csv> --output <output csv> [--meq-mode [--meq-min] [--meq-max] [--meq-steps]]``
+Usage: 
+```
+$ cpp_satellite_analyzer_project --input <input csv> --output <output csv> [--meq-mode [--meq-min] [--meq-max] [--meq-steps]]
+```
 
 This program is used in an Internal Assessment for the International Baccalaureate physics programme.

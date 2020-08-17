@@ -125,12 +125,10 @@ void UCSSatelliteDatabase::update_satellite_qualification()
  * Returns a vector of the satellite database's individual satellites'
  * mass estimations
  */
-std::vector<double> UCSSatelliteDatabase::get_mass_estimations()
-{
+std::vector<double> UCSSatelliteDatabase::get_mass_estimations() {
     std::vector<double> vec;
 
-    for (UCSSatelliteEntry &satellite : m_satellites)
-    {
+    for (UCSSatelliteEntry &satellite : m_satellites) {
         if (!satellite.isQualified())
             continue;
 

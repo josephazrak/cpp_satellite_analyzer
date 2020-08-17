@@ -124,7 +124,5 @@ void UCSSatelliteEntry::compute_kepler_statistics()
     mass_t result = kepler_mass_numerator / kepler_mass_denominator;
 
     kepler_mass = result;
-
-
 }
 

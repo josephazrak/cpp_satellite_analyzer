@@ -1,13 +1,14 @@
-# satellite_analyzer.cpp
-This program analyzes the [UCS Satellite Database](https://www.ucsusa.org/resources/satellite-database) to arrive at interesting conclusions about the mass of the Earth. Grab a fresh copy there.
+# C++ UCS Satellite Database analysis tools
+This program analyzes the [UCS Satellite Database](https://www.ucsusa.org/resources/satellite-database) to arrive at interesting conclusions about the mass of the Earth. Grab a fresh copy there. The overarching theory used for this is Kepler's 3rd law.
 
-It uses Kepler's 3rd law, which can be summarized as $T^2=\frac{4\pi^2}{GM}a^3$.
+It also supports running "variation simulations" to see how changing eccentricity qualifier affects mass estimation statistics ("MEQ mode").
 
-It also supports running "variation simulations" to see how changing eccentricity qualifier affects mass estimation statistics.
+Some 3rd party libraries are used (see LICENSE).
 
-As cited in LICENSE, it uses ben-strasser's fast-cpp-csv-parser library to parse the database file.
+This code uses the Cmake build system. Install cmake to your machine and then simply run the script `build.sh` like this: ``chmod +x build.sh; ./build.sh``
+The binary will pop into a new bin/ folder.
 
-Build with clang++: ``c++ -std=c++11 -Wall satellite_analyzer.cpp -o satellite_analyzer``
-Usage: ``satellite_analyzer ucs-db.csv output.csv [eccentricity_qualifier]``
+## Usage
+Usage: ``cpp_satellite_analyzer_project --input <input csv> --output <output csv> [--meq-mode [--meq-min] [--meq-max] [--meq-steps]]``
 
 This program is used in an Internal Assessment for the International Baccalaureate physics programme.

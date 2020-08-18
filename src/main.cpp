@@ -44,19 +44,6 @@ using string = std::string;
 
 typedef string filename_t;
 
-static void ask_question_str(const string& question_text, string& answer);
-
-/**
- * Asks the user a question, expecting a string-y answer.
- * @param question_text The question to ask.
- * @param answer The variable where the answer should be kept.
- */
-static void ask_question_str(const string& question_text, string& answer)
-{
-    LOG_S(0) << question_text;
-    std::cin >> answer;
-}
-
 int main(int argc, char **argv)
 {
     loguru::init(argc, argv);

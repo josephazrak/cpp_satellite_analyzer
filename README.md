@@ -14,15 +14,19 @@ $ ./build.sh
 The binary will pop into a new bin/ folder.
 
 ## Usage
-Usage: 
 ```
-$ cpp_satellite_analyzer_project 
-    --input <input csv> 
-    --output <output csv> 
-    [--meq-mode 
-        --meq-min <number>
-        --meq-max <number>
-        --meq-steps <number>]
+Usage: cpp-satellite-analyzer [options] 
+
+Arguments:
+--input     	input CSV file for this analysis action [Required]
+--output    	output CSV file for this analysis action [Required]
+--ecc       	eccentricity qualifier (for non-MEQ mode)
+--meq       	enter multiple eccentricity qualifier mode
+--meq-min   	minimum eccentricity (for MEQ mode) * 
+--meq-max   	maximum eccentricity (for MEQ mode) * 
+--meq-steps 	number of steps (for MEQ mode)      *
+
+(* indicates arguments necessary if --meq is passed)
 ```
 
 This program is used in an Internal Assessment for the International Baccalaureate physics programme.

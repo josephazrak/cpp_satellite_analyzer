@@ -13,8 +13,8 @@ struct ecm_analysis_t {
     double mean;
     double median;
     double precision;
-    double  percent_error_mean;
-    double  percent_error_median;
+    double percent_error_mean;
+    double percent_error_median;
     int    sats_disqualified;
     double percent_precision; /*!< relative standard deviation */
 };

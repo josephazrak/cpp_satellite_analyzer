@@ -66,16 +66,6 @@ namespace Util_fn
     }
 
 /**
- * Asks the user a question, expecting a string-y answer.
- * @param question_text The question to ask.
- * @param answer The variable where the answer should be kept.
- */
-    static void ask_question_str(const string& question_text, string& answer)
-    {
-        std::cout << question_text;
-        std::cin >> answer;
-    }
-/**
  * Takes a vector of double numbers and returns the mean
  */
     static double vector_mean(std::vector<double>& vec)

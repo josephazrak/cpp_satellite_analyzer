@@ -29,6 +29,7 @@ public:
     void update_satellite_qualification();
 
     int get_disqualified_satellite_count() const;
+    int get_satellite_count() { return m_satellites.size(); }
 
     std::vector<double> get_mass_estimations();
 };

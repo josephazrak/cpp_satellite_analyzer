@@ -18,8 +18,6 @@ using string = std::string;
  */
 UCSSatelliteDatabase::UCSSatelliteDatabase(const string &csv_path, double eccentricity_qualifier)
 {
-    std::cout << "Parsing CSV file... " << std::endl;
-
     io::CSVReader<8, io::trim_chars<' '>, io::no_quote_escape<'\t'>, io::throw_on_overflow, io::single_line_comment<'#'>> in(csv_path);
     in.read_header(io::ignore_extra_column,
                    "Class of Orbit", "Longitude of GEO (degrees)", "Perigee (km)", "Apogee (km)", "Eccentricity", "Inclination (degrees)",
@@ -51,9 +49,6 @@ UCSSatelliteDatabase::UCSSatelliteDatabase(const string &csv_path, double eccent
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-
-    std::cout << "\rParsed satellites [" << count << "] in " << duration.count() << " milliseconds" << std::endl;
-    std::cout << "Disqu. satellites [" << disqualified_satellites << "] due to missing properties or bad eccentricity" << std::endl;
 
     m_csv_path = csv_path;
 }

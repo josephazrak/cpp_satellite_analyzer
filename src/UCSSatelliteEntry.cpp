@@ -5,6 +5,7 @@
 #include "UCSSatelliteEntry.h"
 #include "Util.cpp"
 #include "candidate_satellite_t.h"
+#include <cmath>
 
 using string = std::string;
 
@@ -82,7 +83,7 @@ UCSSatelliteEntry::UCSSatelliteEntry(candidate_satellite_t& sat)
  * Returns a human-readable string in table format which displays the satellite's
  * name along with its orbital parameters.
  */
-__unused void UCSSatelliteEntry::whoami()
+void UCSSatelliteEntry::whoami()
 {
     /* This function returns a human-readable string which provides the current
      * satellite's information. */

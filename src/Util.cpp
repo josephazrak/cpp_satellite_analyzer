@@ -5,11 +5,12 @@
 #define CPP_SATELLITE_ANALYZER_PROJECT_UTIL
 
 #include <iostream>
-#include "Settings.h"
-#include <fstream>
+#include <cmath>
 #include <numeric>
 #include <iomanip>
 #include <vector>
+#include <algorithm>
+#include "Settings.h"
 
 using string = std::string;
 

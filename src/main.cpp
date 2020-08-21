@@ -32,7 +32,6 @@
 #include <cmath>
 #include <chrono>
 #include <algorithm>
-#include <filesystem>
 #include "include/csv.h"
 #include "include/loguru.cpp"
 #include "include/argparse.hpp"
@@ -44,6 +43,14 @@
 using string = std::string;
 
 typedef string filename_t;
+
+bool file_exists(const string& filename);
+
+bool file_exists(const string& filename)
+{
+    std::ifstream infile(filename);
+    return infile.good();
+}
 
 int main(int argc, char **argv)
 {
@@ -58,7 +65,7 @@ int main(int argc, char **argv)
             .required()
             .help("input CSV file for this analysis action")
             .action([](const std::string &value) {
-                if (!std::filesystem::exists(value))
+                if (!file_exists(value))
                 {
                     LOG_S(ERROR) << "The file " << value << " does not exist. ";
                     exit(1);

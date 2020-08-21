@@ -32,6 +32,7 @@
 #include <cmath>
 #include <chrono>
 #include <algorithm>
+#include <filesystem>
 #include "include/csv.h"
 #include "include/loguru.cpp"
 #include "include/argparse.hpp"

@@ -6,6 +6,7 @@
 #define CPP_SATELLITE_ANALYZER_PROJECT_UCSSATELLITEENTRY_H
 
 #include <iostream>
+#include <iomanip>
 #include "candidate_satellite_t.h"
 
 typedef double kepler_relation_coord_t;
@@ -30,7 +31,7 @@ public:
     explicit UCSSatelliteEntry(candidate_satellite_t& sat);
     ~UCSSatelliteEntry();
 
-    __unused void whoami();
+    void whoami();
     void compute_kepler_statistics();
 
     inline bool isQualified() const { return m_qualifying; };

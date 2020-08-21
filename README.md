@@ -1,5 +1,7 @@
 # C++ UCS Satellite Database analysis tools
-![C/C++ CI](https://github.com/jazrak/cpp_satellite_analyzer/workflows/C/C++%20CI/badge.svg)
+
+<p align="center"><img src="https://github.com/jazrak/cpp_satellite_analyzer/workflows/C/C++%20CI/badge.svg"></img></p>
+
 This program analyzes the [UCS Satellite Database](https://www.ucsusa.org/resources/satellite-database) to arrive at interesting conclusions about the mass of the Earth. The overarching theory used for this is Kepler's 3rd law.
 
 It also supports running "variation simulations" to see how changing eccentricity qualifier affects mass estimation statistics ("MEQ mode").

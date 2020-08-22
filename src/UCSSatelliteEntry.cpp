@@ -55,7 +55,7 @@ UCSSatelliteEntry::UCSSatelliteEntry(candidate_satellite_t& sat)
     m_satellite_row_id = sat.p_satellite_row_id;
 
     try {
-        /* Now, we try to parse these values as double integers.
+        /* Now, we try to parse these values as doubles.
          * Hopefully this won't mess up. */
         m_longitude = std::stod(sat.p_longitude);
         m_perigee = std::stod(sat.p_perigee) * 1000; // CONVERSION from km to m.

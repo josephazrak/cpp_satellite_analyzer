@@ -1,4 +1,4 @@
-# C++ UCS Satellite Database analysis tools
+<h1 align="center"># C++ UCS Satellite Database analysis tools</h1>
 
 <p align="center"><img src="https://github.com/jazrak/cpp_satellite_analyzer/workflows/C/C++%20CI/badge.svg"></img></p>
 

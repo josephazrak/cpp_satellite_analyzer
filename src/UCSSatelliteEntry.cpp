@@ -13,15 +13,7 @@ using string = std::string;
  * Validates the data for selected variables from the UCS Satellite Database. Checks whether this satellite
  * is qualifying and populates member variables.
  *
- * @param p_satellite_row_id     Row number of this satellite in the UCS Satellite Database
- * @param p_orbit_class          Orbit class variable from the UCS Satellite Database
- * @param p_longitude            Longitude variable from the UCS Satellite Database
- * @param p_perigee              Perigee variable from the UCS Satellite Database
- * @param p_apogee               Apogee variable from the UCS Satellite Database
- * @param p_eccentricity         Eccentricity variable from the UCS Satellite Database
- * @param p_period               Period variable from the UCS Satellite Database
- * @param p_launch_mass          Launch mass variable from the UCS Satellite Database
- * @param eccentricity_qualifier Maximum eccentricity value allowed to be a qualified
+ * @param sat Candidate satellite entry (candidate_satellite_t instance) to check—if check passes, the candidate is flagged as disqualified.
  */
 UCSSatelliteEntry::UCSSatelliteEntry(candidate_satellite_t& sat)
 {

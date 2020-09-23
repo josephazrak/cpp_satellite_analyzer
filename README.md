@@ -17,17 +17,20 @@ $ ./build.sh
 The binary will pop into a new bin/ folder.
 
 ## Usage
+### Obtaining the database
+Download a fresh copy of the Union of Concerned Scientists satellite database [here](https://www.ucsusa.org/resources/satellite-database). Be sure to select the "Database (text format)" link. 
+### Running the tool
 ```
 Usage: cpp-satellite-analyzer [options] 
 
 Arguments:
---input     	input CSV file for this analysis action [Required]
---output    	output CSV file for this analysis action [Required]
+--input     	input UCS satellite database file for this analysis action [required]
+--output    	output CSV file for this analysis action                   [required]
 --ecc       	eccentricity qualifier (for non-MEQ mode)
 --meq       	enter multiple eccentricity qualifier mode
---meq-min   	minimum eccentricity (for MEQ mode) * 
---meq-max   	maximum eccentricity (for MEQ mode) * 
---meq-steps 	number of steps (for MEQ mode)      *
+--meq-min   	minimum eccentricity (for MEQ mode)                        * 
+--meq-max   	maximum eccentricity (for MEQ mode)                        * 
+--meq-steps 	number of steps (for MEQ mode)                             *
 
 (* indicates arguments necessary if --meq is passed)
 ```

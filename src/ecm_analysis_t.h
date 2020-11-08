@@ -10,13 +10,18 @@
  */
 struct ecm_analysis_t {
     double qualifier;
-    double mean;
-    double median;
-    double precision;
-    double percent_error_mean;
-    double percent_error_median;
+    double kepler_mean;
+    double kepler_median;
+    double kepler_precision;
+    double kepler_percent_error_mean;
+    double kepler_percent_error_median;
+    double kepler_percent_precision; /*!< relative standard deviation */
+    double sec_mean;
+    double sec_median;
+    double sec_precision;
+    double sec_percent_error_mean;
+    double sec_percent_error_median;
     int    sats_disqualified;
-    double percent_precision; /*!< relative standard deviation */
 };
 
 #endif //CPP_SATELLITE_ANALYZER_PROJECT_ECM_ANALYSIS_T_H

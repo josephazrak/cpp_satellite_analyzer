@@ -107,7 +107,7 @@ UCSSatelliteEntry::~UCSSatelliteEntry() = default;
 void UCSSatelliteEntry::compute_kepler_statistics()
 {
     m_kepler_y = pow(m_period, 2);
-    m_kepler_x = (4.0 * (2.0 * acos(0.0)) * pow((m_apogee + m_perigee)/2.0 + RADIUS_OF_THE_EARTH, 3.0))/GRAVITATIONAL_CONSTANT;
+    m_kepler_x = (4.0 * (2.0 * acos(0.0)) * pow((m_apogee + m_perigee)/2.0 + RADIUS_OF_THE_EARTH, 3.0)) / GRAVITATIONAL_CONSTANT;
 
     /* Along with the m_kepler_x and m_kepler_y statistics, we also compute a kepler_mass statistic
      * This approximation of the mass of the Earth is unique to this satellite and can later be averaged */
@@ -119,3 +119,29 @@ void UCSSatelliteEntry::compute_kepler_statistics()
     kepler_mass = result;
 }
 
+/**
+ * Estimates the satellite's orbital velocity through its period value.
+ * The APOGEE and PERIGEE are averaged to obtain a value 𝛂, which is used in
+ * 2*pi*𝛂*10^3 to calculate the distance traversed per period in metres.
+ * This value is divided by (period * 60) to obtain an estimated orbital velocity.
+ */
+
+void UCSSatelliteEntry::estimate_orbital_velocity()
+{
+    double avg_orbital_circumference = (2 * 3.1415926535 * ((m_apogee + m_perigee) / 2.00));
+
+    m_satellite_velocity = (avg_orbital_circumference) / m_period;
+}
+
+/**
+ * This second estimation method uses the satellite's velocity and distance from the Earth to
+ * calculate a rough Earth-mass estimate through the equivalence (attractive force) = (centripetal force).
+ * The resulting relationship is
+ *                                       M = (Rv^2) / G
+ * where M is the mass of the Earth, R the satellite's distance from the Earth's centre, and G the gravitational
+ * constant.
+ */
+void UCSSatelliteEntry::estimate_earth_mass_method_2()
+{
+    secondary_mass = ( (RADIUS_OF_THE_EARTH + (m_apogee + m_perigee) / 2.00) * pow(m_satellite_velocity, 2) / GRAVITATIONAL_CONSTANT );
+}

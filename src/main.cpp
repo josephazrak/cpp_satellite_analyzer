@@ -182,29 +182,40 @@ int main(int argc, char **argv)
 
         for (int i = 0; i <= iMeqSteps; ++i)
         {
-            // Tell the UCSSatelliteDatabase object that we are updating the candidacy settings
+            // Tell the UCSSatelliteDatabase that we are updating the candidacy settings
             // and reload the satellite qualification info.
             satellite_database.set_eccentricity_qualifier(dMeqMin + dMeqStepSize * i);
             satellite_database.update_satellite_qualification();
 
-            // Recompute Kepler statistics for these new candidacy settings.
+            // Recompute Kepler and secondary statistics for these new candidacy settings.
             satellite_database.compute_kepler_statistics();
+            satellite_database.compute_secondary_method();
 
-            // Now, we have computed a kepler result-set for this specific eccentricity-qualifier.
+            // We have now computed a kepler/secondary result-set for this specific eccentricity-qualifier.
             // Get some useful results from this simulation and save to ecm_analysis_t instance.
-            std::vector<double> mass_estimations = satellite_database.get_mass_estimations();
+            std::vector<double> kep_mass_estimations = satellite_database.get_mass_estimations();
+            std::vector<double> sec_mass_estimations = satellite_database.get_secondary_mass_estimations();
 
-            double vec_mean      = Util_fn::vector_mean(mass_estimations);
-            double vec_median    = Util_fn::vector_median(mass_estimations);
-            double vec_precision = Util_fn::vector_standard_deviation(mass_estimations);
+            double kep_vec_mean      = Util_fn::vector_mean(kep_mass_estimations);
+            double kep_vec_median    = Util_fn::vector_median(kep_mass_estimations);
+            double kep_vec_precision = Util_fn::vector_standard_deviation(kep_mass_estimations);
 
-            double percent_error_mean         = abs(((vec_mean - LITERATURE_VALUE) / (LITERATURE_VALUE)) * 100);
-            double percent_error_median       = abs(((vec_median - LITERATURE_VALUE) / (LITERATURE_VALUE)) * 100);
-            double percent_standard_deviation = (vec_precision / vec_mean) * 100;
+            double sec_vec_mean      = Util_fn::vector_mean(sec_mass_estimations);
+            double sec_vec_median    = Util_fn::vector_median(sec_mass_estimations);
+            double sec_vec_precision = Util_fn::vector_standard_deviation(sec_mass_estimations);
+
+            double kep_percent_error_mean         = abs(((kep_vec_mean - LITERATURE_VALUE) / (LITERATURE_VALUE)) * 100);
+            double kep_percent_error_median       = abs(((kep_vec_median - LITERATURE_VALUE) / (LITERATURE_VALUE)) * 100);
+            double kep_percent_standard_deviation = (kep_vec_precision / kep_vec_mean) * 100;
+
+            double sec_percent_error_mean         = abs(((sec_vec_mean - LITERATURE_VALUE) / (LITERATURE_VALUE)) * 100);
+            double sec_percent_error_median       = abs(((sec_vec_median - LITERATURE_VALUE) / (LITERATURE_VALUE)) * 100);
+            double sec_percent_standard_deviation = (sec_vec_precision / sec_vec_mean) * 100;
 
             ecm_analysis_t result = {
-                    (dMeqMin + dMeqStepSize * i), vec_mean, vec_median, vec_precision, percent_error_mean,
-                    percent_error_median, satellite_database.get_disqualified_satellite_count(), percent_standard_deviation
+                    (dMeqMin + dMeqStepSize * i), kep_vec_mean, kep_vec_median, kep_vec_precision, kep_percent_error_mean,
+                    kep_percent_error_median, kep_percent_standard_deviation, sec_vec_mean, sec_vec_median, sec_vec_precision,
+                    sec_percent_error_mean, sec_percent_error_median, satellite_database.get_disqualified_satellite_count()
             };
 
             // Stash this simulation result to the result-set vector.
@@ -217,18 +228,23 @@ int main(int argc, char **argv)
         // Open a file handle to the desired output file.
         std::ofstream csv_fstream;
         csv_fstream.open(sOutputFile);
-        csv_fstream << "max_eccentricity,mass_mean,mass_median,mass_std_dev,mass_std_dev_percent,percent_error_mean,percent_error_median,sats_disqualified" << std::endl;
+        csv_fstream << "max_eccentricity,kep_mass_mean,kep_mass_median,kep_mass_std_dev,kep_mass_std_dev_percent,kep_percent_error_mean,kep_percent_error_median,sec_mean,sec_median,sec_std_dev,sec_percent_error_mean,sec_percent_error_median,sats_disqualified" << std::endl;
 
         for (ecm_analysis_t& result : meq_result_vector)
         {
             csv_fstream
                     << result.qualifier << ","
-                    << result.mean << ","
-                    << result.median << ","
-                    << result.precision << ","
-                    << result.percent_precision << ","
-                    << result.percent_error_mean << ","
-                    << result.percent_error_median << ","
+                    << result.kepler_mean << ","
+                    << result.kepler_median << ","
+                    << result.kepler_precision << ","
+                    << result.kepler_percent_precision << ","
+                    << result.kepler_percent_error_mean << ","
+                    << result.kepler_percent_error_median << ","
+                    << result.sec_mean << ","
+                    << result.sec_median << ","
+                    << result.sec_precision << ","
+                    << result.sec_percent_error_mean << ","
+                    << result.sec_percent_error_median << ","
                     << result.sats_disqualified
                     << std::endl;
         }
@@ -242,6 +258,7 @@ int main(int argc, char **argv)
         //                      NON-MEQ MODE LOGIC BEGIN
         // ----------------------------------------------------------------------
         satellite_database.compute_kepler_statistics();
+        satellite_database.compute_secondary_method();
         satellite_database.dump_kepler_data_to_csv(sOutputFile);
 
         LOG_S(INFO) << "Finished analysis operation!";

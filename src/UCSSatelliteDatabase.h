@@ -27,11 +27,13 @@ public:
     void dump_kepler_data_to_csv(std::string& path);
     void set_eccentricity_qualifier(double qualifier) { m_eccentricity_qualifier = qualifier; };
     void update_satellite_qualification();
+    void compute_secondary_method();
 
     int get_disqualified_satellite_count() const;
     int get_satellite_count() { return m_satellites.size(); }
 
-    std::vector<double> get_mass_estimations();
+    std::vector<mass_t> get_mass_estimations();
+    std::vector<mass_t> get_secondary_mass_estimations();
 };
 
 

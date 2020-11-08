@@ -90,7 +90,7 @@ void UCSSatelliteDatabase::dump_kepler_data_to_csv(string& path)
 {
     std::ofstream basicOfstream;
     basicOfstream.open(path);
-    basicOfstream << "x,y,mass_estimation" << std::endl;
+    basicOfstream << "x,y,mass_estimation_kepler,mass_estimation_secondary" << std::endl;
 
     for (UCSSatelliteEntry &entry : m_satellites)
     {
@@ -98,7 +98,7 @@ void UCSSatelliteDatabase::dump_kepler_data_to_csv(string& path)
         if (!entry.isQualified())
             continue;
 
-        basicOfstream << entry.getKeplerX() << "," << entry.getKeplerY() << "," << entry.getKeplerMass() << std::endl;
+        basicOfstream << entry.getKeplerX() << "," << entry.getKeplerY() << "," << entry.getKeplerMass() << "," << entry.getSecondaryMass() << std::endl;
     }
 
     basicOfstream.close();
@@ -120,14 +120,29 @@ void UCSSatelliteDatabase::update_satellite_qualification()
  * Returns a vector of the satellite database's individual satellites'
  * mass estimations
  */
-std::vector<double> UCSSatelliteDatabase::get_mass_estimations() {
-    std::vector<double> vec;
+std::vector<mass_t> UCSSatelliteDatabase::get_mass_estimations() {
+    std::vector<mass_t> vec;
 
     for (UCSSatelliteEntry &satellite : m_satellites) {
         if (!satellite.isQualified())
             continue;
 
         vec.push_back(satellite.getKeplerMass());
+    }
+
+    return vec;
+}
+
+std::vector<mass_t> UCSSatelliteDatabase::get_secondary_mass_estimations()
+{
+    std::vector<mass_t> vec;
+
+    for (UCSSatelliteEntry &satellite : m_satellites)
+    {
+        if (!satellite.isQualified())
+            continue;
+
+        vec.push_back(satellite.getSecondaryMass());
     }
 
     return vec;
@@ -143,4 +158,15 @@ int UCSSatelliteDatabase::get_disqualified_satellite_count() const {
     }
 
     return buf;
+}
+
+void UCSSatelliteDatabase::compute_secondary_method()
+{
+    for (UCSSatelliteEntry &satellite : m_satellites) {
+        if (!satellite.isQualified())
+            continue;
+
+        satellite.estimate_orbital_velocity();
+        satellite.estimate_earth_mass_method_2();
+    }
 }

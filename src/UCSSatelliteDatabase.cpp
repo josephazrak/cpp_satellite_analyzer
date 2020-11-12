@@ -4,6 +4,7 @@
 
 #include "UCSSatelliteDatabase.h"
 #include "include/csv.h"
+#include "include/loguru.hpp"
 #include <vector>
 #include <fstream>
 
@@ -18,39 +19,47 @@ using string = std::string;
  */
 UCSSatelliteDatabase::UCSSatelliteDatabase(const string &csv_path, double eccentricity_qualifier)
 {
-    io::CSVReader<8, io::trim_chars<' '>, io::no_quote_escape<'\t'>, io::throw_on_overflow, io::single_line_comment<'#'>> in(csv_path);
-    in.read_header(io::ignore_extra_column,
-                   "Class of Orbit", "Longitude of GEO (degrees)", "Perigee (km)", "Apogee (km)", "Eccentricity", "Inclination (degrees)",
-                   "Period (minutes)", "Launch Mass (kg.)");
-    int count = 0;
-    int disqualified_satellites = 0;
+    try {
+        io::CSVReader<8, io::trim_chars<' '>, io::no_quote_escape<'\t'>, io::throw_on_overflow, io::single_line_comment<'#'>> in(
+                csv_path);
+        in.read_header(io::ignore_extra_column,
+                       "Class of Orbit", "Longitude of GEO (degrees)", "Perigee (km)", "Apogee (km)", "Eccentricity",
+                       "Inclination (degrees)", "Period (minutes)", "Launch Mass (kg.)");
+        int count = 0;
+        int disqualified_satellites = 0;
 
-    string pre_orbit, pre_longitude, pre_perigee, pre_apogee, pre_eccentricity, pre_inclination, pre_period, pre_launch_mass;
+        string pre_orbit, pre_longitude, pre_perigee, pre_apogee, pre_eccentricity, pre_inclination, pre_period, pre_launch_mass;
 
-    auto start = std::chrono::high_resolution_clock::now();
+        auto start = std::chrono::high_resolution_clock::now();
 
-    while (in.read_row(pre_orbit, pre_longitude, pre_perigee, pre_apogee, pre_eccentricity, pre_inclination, pre_period, pre_launch_mass))
-    {
-        count++;
+        while (in.read_row(pre_orbit, pre_longitude, pre_perigee, pre_apogee, pre_eccentricity, pre_inclination,
+                           pre_period, pre_launch_mass)) {
+            count++;
 
-        candidate_satellite_t candidate_satellite = {
-                count, pre_orbit, pre_longitude, pre_perigee, pre_apogee, pre_eccentricity, pre_inclination, pre_period, pre_launch_mass, eccentricity_qualifier
-        };
+            candidate_satellite_t candidate_satellite = {
+                    count, pre_orbit, pre_longitude, pre_perigee, pre_apogee, pre_eccentricity, pre_inclination,
+                    pre_period, pre_launch_mass, eccentricity_qualifier
+            };
 
-        // Create a UCSSatelliteEntry object to match this raw CSV entry
-        UCSSatelliteEntry entry(candidate_satellite);
+            // Create a UCSSatelliteEntry object to match this raw CSV entry
+            UCSSatelliteEntry entry(candidate_satellite);
 
-        if (!entry.isQualified())
-            disqualified_satellites++;
+            if (!entry.isQualified())
+                disqualified_satellites++;
 
-        // Push this to guy the satellite vector
-        m_satellites.push_back(entry);
+            // Push this to guy the satellite vector
+            m_satellites.push_back(entry);
+        }
+
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+
+        m_csv_path = csv_path;
+
+    } catch (const io::error::too_few_columns& e) {
+        std::cout << "Parse failed! You may need to use the preprocess.py script to sanitize the database file first." << std::endl;
+        exit(-1);
     }
-
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-
-    m_csv_path = csv_path;
 }
 
 UCSSatelliteDatabase::~UCSSatelliteDatabase() = default;

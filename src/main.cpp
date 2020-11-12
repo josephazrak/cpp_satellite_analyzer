@@ -33,6 +33,7 @@
 #include <chrono>
 #include <algorithm>
 #include <fstream>
+#include <set>
 #include "include/csv.h"
 #include "include/loguru.cpp"
 #include "include/argparse.hpp"
@@ -225,13 +226,19 @@ int main(int argc, char **argv)
         // Now, we have a populated meq_result_vector with n = iMeqSteps simulation entries.
         // We need to output this data to a csv file.
 
+        // In order to avoid duplicate entries
+        std::set<int> already_seen_rows {};
+
         // Open a file handle to the desired output file.
         std::ofstream csv_fstream;
         csv_fstream.open(sOutputFile);
-        csv_fstream << "max_eccentricity,kep_mass_mean,kep_mass_median,kep_mass_std_dev,kep_mass_std_dev_percent,kep_percent_error_mean,kep_percent_error_median,sec_mean,sec_median,sec_std_dev,sec_percent_error_mean,sec_percent_error_median,sats_disqualified" << std::endl;
+        csv_fstream << "max_eccentricity,kep_mass_mean,kep_mass_median,kep_mass_std_dev,kep_mass_std_dev_percent,kep_percent_error_mean,kep_percent_error_median,sec_mean,sec_median,sec_std_dev,sec_percent_error_mean,sec_percent_error_median,sats_disqualified,sats_used" << std::endl;
 
         for (ecm_analysis_t& result : meq_result_vector)
         {
+            if (already_seen_rows.find(result.sats_disqualified) != already_seen_rows.end())
+                continue; // We have already seen this datapoint, do not export it.
+
             csv_fstream
                     << result.qualifier << ","
                     << result.kepler_mean << ","
@@ -245,8 +252,11 @@ int main(int argc, char **argv)
                     << result.sec_precision << ","
                     << result.sec_percent_error_mean << ","
                     << result.sec_percent_error_median << ","
-                    << result.sats_disqualified
+                    << result.sats_disqualified << ","
+                    << (satellite_database.get_satellite_count() - result.sats_disqualified)
                     << std::endl;
+
+            already_seen_rows.insert(result.sats_disqualified);
         }
 
         csv_fstream.close();

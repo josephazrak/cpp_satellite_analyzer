@@ -9,7 +9,7 @@ It also supports running "variation simulations" to see how changing eccentricit
 Some 3rd party libraries are used (see CREDITS). The code itself is licensed under the MIT license; see LICENSE.
 
 ## Building
-This code uses the Cmake build system. Install cmake to your machine and then simply run the script `build.sh` like this: 
+This code uses the Cmake build system. Install cmake to your machine and then simply run the script `build.sh` like this:
 ```
 $ chmod +x build.sh
 $ ./build.sh
@@ -18,18 +18,23 @@ The binary will pop into a new bin/ folder.
 
 ## Usage
 ### Obtaining the database
-Download a fresh copy of the Union of Concerned Scientists satellite database [here](https://www.ucsusa.org/resources/satellite-database). Be sure to select the "Database (text format)" link. 
+Download a fresh copy of the Union of Concerned Scientists satellite database [here](https://www.ucsusa.org/resources/satellite-database). Be sure to select the "Database (text format)" link.
+### Sanitizing the database
+Sometimes, the downloaded csv file contains irregularities and is unparsable. You can use the included `preprocess.py` Python script to sanitize the file like so:
+```
+$ python preprocess.py --input database.csv --output database_sanitized.csv
+```
 ### Running the tool
 ```
-Usage: cpp-satellite-analyzer [options] 
+Usage: cpp-satellite-analyzer [options]
 
 Arguments:
 --input     	input UCS satellite database file for this analysis action [required]
 --output    	output CSV file for this analysis action                   [required]
 --ecc       	eccentricity qualifier (for non-MEQ mode)
 --meq       	enter multiple eccentricity qualifier mode
---meq-min   	minimum eccentricity (for MEQ mode)                        * 
---meq-max   	maximum eccentricity (for MEQ mode)                        * 
+--meq-min   	minimum eccentricity (for MEQ mode)                        *
+--meq-max   	maximum eccentricity (for MEQ mode)                        *
 --meq-steps 	number of steps (for MEQ mode)                             *
 
 (* indicates arguments necessary if --meq is passed)

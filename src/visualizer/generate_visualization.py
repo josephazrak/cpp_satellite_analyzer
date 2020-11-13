@@ -1,10 +1,10 @@
 #    generate_visualization.py
 #
-#    Takes a file from the C++ data preprocessor (github:jazrak/cpp_satellite_analyzer) and creates useful
+#    Takes a file from the C++ data processor (github:jazrak/cpp_satellite_analyzer) and creates useful
 #    graphical visualizations using matplotlib.
 #
 #    Example usage:
-#        1. generate a preprocessed analysis file
+#        1. generate a processed analysis file
 #            `satellite_analyzer [data.csv] [unused.csv] 0`
 #            y[enter]0[enter]1[enter]200[enter]processed.csv
 #
@@ -31,7 +31,6 @@ import daiquiri
 import logging
 import csv
 
-<<<<<<< HEAD
 daiquiri.setup(level=logging.INFO)
 _logger = daiquiri.getLogger('viz')
 
@@ -43,10 +42,7 @@ def plot_kepler_xypair(args: argparse.Namespace):
     #
     # uses the 'graphical method' to estimate the mass of the Earth by fitting a LSRL to the linear
     # relationship given by 'keplerX' vs 'keplerY'; the negative reciprocal of the slope of the LSRL
-    # is the mass estimation.
-=======
-    Used in an International Baccalaureate Internal Assessment for Physics.
->>>>>>> parent of ac457c2... change README
+    # is the mass estimation
 
     _logger.info('starting plot',
                  plot_type=args.plot_name)

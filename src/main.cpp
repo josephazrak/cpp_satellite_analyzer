@@ -12,7 +12,7 @@
  * To build this code, run `./build.sh`. You need Cmake.
  *
  * Usage: cpp-satellite-analyzer [options]
-
+ *
  * Arguments:
  * --input     	input CSV file for this analysis action[Required]
  * --output    	output CSV file for this analysis action[Required]

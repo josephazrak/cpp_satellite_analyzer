@@ -4,21 +4,23 @@
 #    graphical visualizations using matplotlib.
 #
 #    Example usage:
-#        1. generate a processed analysis file
-#            `satellite_analyzer [data.csv] [unused.csv] 0`
-#            y[enter]0[enter]1[enter]200[enter]processed.csv
+#        1. preprocess a UCS database file
+#            `$ python3 preprocess.py --input UCS_database.csv --output data_sanitized.csv`
+
+#        2. generate a processed analysis file
+#            `$ satellite_analyzer --input data_sanitized.csv --ecc 0.1 --output processed.csv
 #
-#        2. generate visualizations
-#            `python3 generate_visualization.py kepler-xypair processed.csv`
+#        3. generate visualizations
+#            `$ python3 generate_visualization.py kepler-xypair processed.csv`
 #
 #    SYNTAX: python3 generate_visualization.py [PLOT_NAME] [DATA_FILE]
 #
-#    PLOT_NAME: string, one of...
-#              PLOT_NAME                  DESCRIPTION                        DATA
-#            ------------------------+----------------------------+---------------------------------
-#        1. 'kepler-xypair'          | `x vs y kepler pairs `     | [data-type: single-eccent-mode]
-#        2. 'eccent-mean-error'      | `max. eccent vs mean error`| [data-type: multiple-eccent-mode]
-#        3. 'eccent-mean-error-disq' | `same as 2 plus #disq sats`| [data-type: multiple-eccent-mode]
+#    PLOT_NAME:
+#                      PLOT_NAME                      DESCRIPTION                       DATA FILE TYPE
+#        ------------------------------------+-------------------------------+---------------------------------
+#        1. 'kepler-xypair'                  | `x vs y kepler pairs `        | [data-type: single-eccent-mode  ]
+#        2. 'eccent-mean-error'              | `max. eccent vs mean error`   | [data-type: multiple-eccent-mode]
+#        3. 'eccent-mean-error-disq'         | `same as 2 plus #disq sats`   | [data-type: multiple-eccent-mode]
 #
 #    Used in an International Baccalaureate Internal Assessment for Physics.
 #
@@ -30,6 +32,8 @@ import argparse
 import daiquiri
 import logging
 import csv
+#import pydevd_pycharm
+#pydevd_pycharm.settrace('localhost', port=8098, stdoutToServer=True, stderrToServer=True)
 
 daiquiri.setup(level=logging.INFO)
 _logger = daiquiri.getLogger('viz')
@@ -60,12 +64,13 @@ def plot_kepler_xypair(args: argparse.Namespace):
         # DEBUG: only take first n value
         n = 10000
         cur = 0
-        for row in reader:
+        for idx, row in enumerate(reader):
             if cur >= n:
                 break
 
-            if row[0] == "x":
-                # we are in header row, skip this
+            if idx == 0:
+                # we are in header row, assert that this is a non-MEO file
+
                 continue
 
             sats_kepler_x.append(float(row[0]))
@@ -77,7 +82,7 @@ def plot_kepler_xypair(args: argparse.Namespace):
                  plot_type=args.plot_name)
 
     # Plot data series
-    plt.plot(sats_kepler_x, sats_kepler_x, marker='o')
+    plt.plot(sats_kepler_x, sats_kepler_x, marker='o', markersize=4, c="black")
 
     # Space out ticks ('step size') on x- and y- axes
     x_ticks_list = numpy.arange(
@@ -122,7 +127,6 @@ def plot_kepler_xypair(args: argparse.Namespace):
 def plot_eccent_mean_error(args: argparse.Namespace):
     3 + 2
 
-
 if __name__ == "__main__":
     # get args passed
     parser = argparse.ArgumentParser(description='Use a kepler datafile to generate matplotlib visualizations.')
@@ -140,3 +144,5 @@ if __name__ == "__main__":
         plot_kepler_xypair(args)
     elif args.plot_name == "eccent-mean_error":
         plot_eccent_mean_error(args)
+    else:
+        print("{} is not a valid plot option. Options: kepler-xypair, eccent-mean_error".format(args.plot_name))

@@ -4,4 +4,7 @@ cmake-build-debug
 .idea
 .DS_Store
 tmp
-
+visualizer/data/*
+visualizer/fig/*
+visualizer/*.png
+visualizer/.ipynb_checkpoints

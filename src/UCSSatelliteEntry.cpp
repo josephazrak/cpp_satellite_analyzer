@@ -8,6 +8,7 @@
 #include <cmath>
 
 using string = std::string;
+const double PI = 2.0 * acos(0.0);
 
 /**
  * Validates the data for selected variables from the UCS Satellite Database. Checks whether this satellite
@@ -75,7 +76,7 @@ UCSSatelliteEntry::UCSSatelliteEntry(candidate_satellite_t& sat)
  * Returns a human-readable string in table format which displays the satellite's
  * name along with its orbital parameters.
  */
-void UCSSatelliteEntry::whoami()
+[[maybe_unused]] void UCSSatelliteEntry::whoami()
 {
     /* This function returns a human-readable string which provides the current
      * satellite's information. */
@@ -99,20 +100,22 @@ UCSSatelliteEntry::~UCSSatelliteEntry() = default;
  * The kepler_x and kepler_y pairs are calculated from a generalization of Kepler's 3rd law.
  * The mass of the Earth can be estimated by taking the slope of the result of a regression of these coordinates.
  *
- * The kepler_mass estimate is a second method for calculating the mass of the Earth—it functions
+ * The kepler_mass estimate is a method for calculating the mass of the Earth—it functions
  * by rearranging Kepler's 3rd law to solve for the Earth's mass. These numbers must later be averaged
  * over all satellites to find a valid answer.
  */
 
 void UCSSatelliteEntry::compute_kepler_statistics()
 {
+    double r_value = (m_apogee + m_perigee)/2.0 + RADIUS_OF_THE_EARTH;
+
     m_kepler_y = pow(m_period, 2);
-    m_kepler_x = (4.0 * (2.0 * acos(0.0)) * pow((m_apogee + m_perigee)/2.0 + RADIUS_OF_THE_EARTH, 3.0)) / GRAVITATIONAL_CONSTANT;
+    m_kepler_x = (4.0 * pow(PI, 2) * pow(r_value, 3.0)) / GRAVITATIONAL_CONSTANT;
 
     /* Along with the m_kepler_x and m_kepler_y statistics, we also compute a kepler_mass statistic
      * This approximation of the mass of the Earth is unique to this satellite and can later be averaged */
 
-    double kepler_mass_numerator = (4.0 * pow((2.0 * acos(0.0)),2.0) * pow((m_apogee + m_perigee)/2.0 + RADIUS_OF_THE_EARTH, 3.0));
+    double kepler_mass_numerator = (4.0 * pow(PI, 2.0) * pow(r_value, 3.0));
     double kepler_mass_denominator = (pow(m_period, 2.0) * GRAVITATIONAL_CONSTANT);
     mass_t result = kepler_mass_numerator / kepler_mass_denominator;
 
@@ -143,5 +146,5 @@ void UCSSatelliteEntry::estimate_orbital_velocity()
  */
 void UCSSatelliteEntry::estimate_earth_mass_method_2()
 {
-    secondary_mass = ( (RADIUS_OF_THE_EARTH + (m_apogee + m_perigee) / 2.00) * pow(m_satellite_velocity, 2) / GRAVITATIONAL_CONSTANT );
+    secondary_mass = ((RADIUS_OF_THE_EARTH + (m_apogee + m_perigee) / 2.00) * pow(m_satellite_velocity, 2) / GRAVITATIONAL_CONSTANT);
 }

@@ -34,7 +34,7 @@ public:
     explicit UCSSatelliteEntry(candidate_satellite_t& sat);
     ~UCSSatelliteEntry();
 
-    void whoami();
+    [[maybe_unused]] void whoami();
     void compute_kepler_statistics();
     void estimate_orbital_velocity();
     void estimate_earth_mass_method_2();
